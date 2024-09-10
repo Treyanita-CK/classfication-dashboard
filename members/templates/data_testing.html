@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+
+    <title>Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/headers/">
+    
+    <!-- CSS-->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="{% static 'js/chart.js' %}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="/docs/5.0/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/5.0/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/5.0/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico">
+    <meta name="theme-color" content="#7952b3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 4px;
+        margin: 3px;
+        max-width: 800px;
+        height: 150px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      @media (max-width: 600px) {
+        .card {
+            margin: 5px;
+            padding: 10px;
+        }
+      }
+        
+
+    </style>
+    <script>
+      <script type="text/javascript">
+        function getSelectedProducts() {
+          // Mengambil semua checkbox dengan name="barang"
+          const checkboxes = document.querySelectorAll('input[name="barang"]:checked');
+          
+          // Mengumpulkan nilai dari checkbox yang dipilih
+          const selectedValues = Array.from(checkboxes).map(checkbox => checkbox.value);
+    
+          // Menampilkan hasil di konsol
+          console.log('Produk yang dipilih:', selectedValues);
+        }
+      </script>
+    </script>
+
+    <!-- JSON Parse -->
+    <script type="application/json" id="chart-data-barang">{{ barang|safe }}</script>
+    <script type="application/json" id="chart-data-platform">{{ platform|safe }}</script>
+    <script type="application/json" id="chart-data-range-harga">{{ range_harga|safe }}</script>
+  </head>
+  <body>
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Visualisasi Hasil Klasifikasi</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-nav">
+      <div class="nav-item text-nowrap">
+      </div>
+    </div>
+</header>
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'klasifikasi' %}">
+              <i class="bi bi-clipboard-data-fill"></i>
+                Hasil Klasifikasi
+            </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'data_testing' %}">
+                <i class="bi bi-database-fill-add"></i>
+                Data Testing
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link color-light" href="{% url 'grafik-html' %}">
+                <i class="bi bi-cart-fill"></i>
+                Frekuensi Belanja
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'platform-html' %}">
+                <i class="bi bi-shop"></i>
+                Platform
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'barang-html' %}">
+                <i class="bi bi-bag-check-fill"></i>
+                Produk
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'range-harga-html' %}">
+                <i class="bi bi-tags-fill"></i>
+                Range Harga
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'promo-diskon-html' %}">
+                <i class="bi bi-receipt-cutoff"></i>
+                Promo & Diskon
+              </a>
+            </li>
+          </ul>
+          <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'iklan-html' %}">
+              <i class="bi bi-badge-ad-fill"></i>
+                Iklan
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'desain-html' %}">
+              <i class="bi bi-star-fill"></i>
+                Desain Favorit
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+  <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">Data Testing</h1>
+    </div>
+    <!--form nama-->
+      <form method="POST" action="{% url 'add-responden' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <form class="needs-validation" novalidate>
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <label for="firstName" class="form-label">Nama</label>
+              <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Anda" value="nama">
+            </div>
+          </div>
+
+    <!--form gender-->
+      <div class="my-3">
+          <h6 class="mb-3">Pilih Jenis Kelamin</h6>
+          <div class="form-check">
+            <input id="gender 1" name="gender" type="radio" class="form-check-input" value="Perempuan">
+            <i class="bi bi-person-standing-dress"></i>
+            <label class="form-check-label" for="gender 1">Perempuan</label>
+          </div>
+          <div class="form-check">
+            <input id="gender 2" name="gender" type="radio" class="form-check-input" value="Laki-laki">
+            <i class="bi bi-person-standing"></i>
+            <label class="form-check-label" for="gender 2">Laki-Laki</label>
+          </div>
+        </div>
+      <!--frekuensi belanja-->
+        <div class="my-3">
+          <h6 class="mb-3">Frekuensi belanja 3 bulan terakhir</h6>
+          <span>
+            <input  id="sangat jarang" name="frk_belanja" type="radio" value="sangat jarang">
+            <label for="sangat jarang"> Sangat Jarang</label>
+          </span>
+          <span>
+            <input  id="jarang" name="frk_belanja" type="radio" value="jarang">
+            <label for="jarang"> Jarang</label>
+          </span>
+          <span>
+            <input  id="netral" name="frk_belanja" type="radio" value="netral">
+            <label for="netral"> Netral</label>
+          </span>
+          <span>
+            <input id="sering" name="frk_belanja" type="radio"  value="sering">
+            <label for="sering"> Sering</label>
+          </span>
+          <span>
+            <input  id="sangat sering" name="frk_belanja" type="radio" value="sangat sering">
+            <label for="sangat sering"> Sangat Sering</label>
+          </span>
+        </div>
+        <!--Platform-->
+        <div class="my-3">
+          <h6>Platform yang sering dikunjungi</h6>
+          <span>
+            <input type="checkbox" id="shopee" name="platform" value="Shopee">
+            <label for="shopee"> Shopee</label><br>
+          </span>
+          <span>
+            <input type="checkbox" id="tokopedia" name="platform" value="Tokopedia">
+            <label for="tokopedia"> Tokopedia</label><br>
+          </span>
+          <span>  <input type="checkbox" id="lazada" name="platform" value="Lazada">
+            <label for="lazada"> Lazada</label><br>
+          </span>
+          <span>  <input type="checkbox" id="blibli" name="platform" value="BliBli">
+            <label for="blibli"> BliBli</label><br>
+          </span>
+          <span><input type="checkbox" id="bukalapak" name="platform" value="Bukalapak">
+            <label for="bukalapak"> Bukalapak</label><br>
+          </span>
+          <span>
+            <input type="checkbox" id="tiktok_shop" name="platform" value="TikTok Shop">
+            <label for="tiktok_shop"> TikTok Shop</label><br><br>
+          </span>
+          <span>
+            <!-- Lainnya -->
+          <label for="lainnya">Lainnya:</label>
+          <input type="text" id="lainnya" name="lainnya"><br><br>
+          </span>
+       
+        <!-- Produk -->
+        <label>Produk:</label><br>
+        </span>
+        <input type="checkbox" id="pakaian_aksesoris" name="barang" value="Pakaian dan Aksesoris">
+        <label for="pakaian_aksesoris"> Pakaian dan Aksesoris</label><br>
+        </span>
+        <span>
+        <input type="checkbox" id="produk_kecantikan" name="barang" value="Produk Kecantikan (Skincare, Makeup)">
+        <label for="produk_kecantikan"> Produk Kecantikan (Skincare, Makeup)</label><br>
+        </span>
+        <input type="checkbox" id="alat_lukis_tulis_musik" name="barang" value="Alat Lukis/ Alat Tulis/ Alat Musik">
+        <label for="alat_lukis_tulis_musik"> Alat Lukis/ Alat Tulis/ Alat Musik</label><br>
+        <input type="checkbox" id="elektronik" name="barang" value="Elektronik">
+        <label for="elektronik"> Elektronik</label><br>
+        <input type="checkbox" id="peralatan_rumah_tangga" name="barang" value="Peralatan Rumah Tangga">
+        <label for="peralatan_rumah_tangga"> Peralatan Rumah Tangga</label><br>
+        <input type="checkbox" id="game" name="barang" value="Game">
+        <label for="game"> Game</label><br>
+        <input type="checkbox" id="buku" name="barang" value="Buku">
+        <label for="buku"> Buku</label><br>
+        <input type="checkbox" id="alat_olahraga" name="barang" value="Alat Olahraga">
+        <label for="alat_olahraga"> Alat Olahraga</label><br><br>
+        <!-- Lainnya -->
+        <label for="lainnya">Lainnya:</label>
+        <input type="text" id="lainnya" name="lainnya"><br><br>
+
+        <!--range_harga-->
+        <div class="my-3">
+          <h6 class="mb-3">Range Harga Favorit</h6>
+            <span>
+              <input id="less-10k" name="range_harga" type="radio" value="<10.000" required>
+              <label for="less-10k"> &lt;10.000</label>
+            </span>
+            <span>
+              <input id="10k-30k" name="range_harga" type="radio" value="10.000 - 30.000" required>
+              <label for="10k-30k"> 10.000 - 30.000</label>
+            </span>
+            <span>
+              <input id="30k-50k" name="range_harga" type="radio" value="30.000 - 50.000" required>
+              <label class="form-check-label" for="30k-50k">30.000 - 50.000</label>
+            </span>
+            <span>
+              <input id="50k-70k" name="range_harga" type="radio" value="50.000 - 70.000" required>
+              <label class="form-check-label" for="50k-70k">50.000 - 70.000</label>
+            </span>
+            <span>
+              <input id="70k-100k" name="range_harga" type="radio" value="70.000 - 100.000" required>
+              <label class="form-check-label" for="70k-100k">70.000 - 100.000</label>
+            </span>
+            <span>
+              <input id="more-100k" name="range_harga" type="radio" value=">100.000" required>
+              <label class="form-check-label" for="more-100k">&gt;100.000</label>
+            </span>
+          </div>
+        </div>
+        <!--Alasan-->
+        <div class="my-3">
+          <h6 class="mb-3">Alasan Membeli Secara Online</h6>
+            <input id="kemudahan" name="alasan" type="radio" class="form-check-input" value="Kemudahan" required>
+            <label class="form-check-label" for="kemudahan">Kemudahan</label>
+            <input id="harga-murah" name="alasan" type="radio" class="form-check-input" value="Harga Lebih Murah" required>
+            <label class="form-check-label" for="harga-murah">Harga Lebih Murah</label>
+            <input id="variasi-produk" name="alasan" type="radio" class="form-check-input" value="Variasi Produk" required>
+            <label class="form-check-label" for="variasi-produk">Variasi Produk</label>
+            <input id="promo-diskon" name="alasan" type="radio" class="form-check-input" value="Promo dan Diskon" required>
+            <label class="form-check-label" for="promo-diskon">Promo dan Diskon</label>
+            <input id="pengiriman-cepat" name="alasan" type="radio" class="form-check-input" value="Pengiriman Cepat" required>
+            <label class="form-check-label" for="pengiriman-cepat">Pengiriman Cepat</label>
+            <input id="ulasan" name="alasan" type="radio" class="form-check-input" value="Ulasan" required>
+            <label class="form-check-label" for="ulasan">Ulasan</label>
+            <input id="lainnya" name="alasan" type="radio" class="form-check-input" value="Lainnya" required>
+            <label class="form-check-label" for="lainnya">Lainnya</label>
+          <div id="other-reason" style="display:none;">
+            <label for="otherReason">Sebutkan:</label>
+            <input id="otherReason" name="otherReason" type="text" class="form-control">
+          </div>
+        </div>
+        <br>
+        <!--jenis promo-->
+        <div class="my-3">
+          <h6 class="mb-3">Jenis Promo dan Diskon</h6>
+          <input id="diskon-persentase" name="promo_diskon" type="radio" value="Diskon Persentase" required>
+          <label for="diskon-persentase">Diskon Persentase (contoh: 20% off)</label>
+          
+          <input id="diskon-jumlah" name="promo_diskon" type="radio" value="Diskon Jumlah" required>
+          <label for="diskon-jumlah">Diskon Jumlah (contoh: Rp. 50.000 off)</label>
+          
+          <input id="beli-satu-gratis-satu" name="promo_diskon" type="radio" value="Beli Satu Gratis Satu" required>
+          <label for="beli-satu-gratis-satu">Beli Satu Gratis Satu</label>
+          
+          <input id="cashback" name="promo_diskon" type="radio" value="Cashback" required>
+          <label for="cashback">Cashback</label>
+          
+          <input id="gratis-ongkir" name="promo_diskon" type="radio" value="Gratis Ongkir" required>
+          <label for="gratis-ongkir">Gratis Ongkir</label>
+        </div>
+        <br>
+        <!--media iklan-->
+        <div class="my-3">
+          <h6 class="mb-3">Media Iklan</h6>
+          <input id="media-sosial" name="medsos" type="radio" value="Media Sosial" required>
+          <label for="media-sosial">Media Sosial</label>
+      
+          <input id="situs-website" name="medsos" type="radio" value="Situs Website" required>
+          <label for="situs-website">Situs Website</label>
+      
+          <input id="email" name="medsos" type="radio" value="E-mail" required>
+          <label for="email">E-mail</label>
+      
+          <input id="televisi" name="medsos" type="radio" value="Televisi" required>
+          <label for="televisi">Televisi</label>
+      
+          <input id="radio" name="medsos" type="radio" value="Radio" required>
+          <label for="radio">Radio</label>
+      
+          <input id="media-cetak" name="medsos" type="radio" value="Media Cetak" required>
+          <label for="media-cetak">Media Cetak (majalah, koran)</label>
+        </div>
+        <br>
+        <!--jenis iklan-->
+        <div class="my-3">
+          <h6 class="mb-3">Jenis Iklan yang Menarik</h6>
+          <input id="video" name="iklan" type="radio" value="Video" required>
+          <label for="video">Video</label>
+      
+          <input id="gambar" name="iklan" type="radio" value="Gambar" required>
+          <label for="gambar">Gambar</label>
+      
+          <input id="teks" name="iklan" type="radio" value="Teks" required>
+          <label for="teks">Teks</label>
+      
+          <input id="iklan-interaktif" name="iklan" type="radio" value="Iklan Interaktif" required>
+          <label for="iklan-interaktif">Iklan Interaktif</label>
+      
+          <input id="testimonial-pelanggan" name="iklan" type="radio" value="Testimonial Pelanggan" required>
+          <label for="testimonial-pelanggan">Testimonial Pelanggan</label>
+        </div>        
+        <br>
+        <!--desian favorit-->
+        <div class="my-3">
+          <h6 class="mb-3">Desain Favorit</h6>
+          <input id="minimalis" name="desain" type="radio" value="Minimalis" required>
+          <label for="minimalis">Minimalis</label>
+      
+          <input id="berwarna-warni" name="desain" type="radio" value="Berwarna-warni dan Menarik Perhatian" required>
+          <label for="berwarna-warni">Berwarna-warni dan Menarik Perhatian</label>
+      
+          <input id="tidak-ada-preferensi" name="desain" type="radio" value="Tidak Ada Preferensi" required>
+          <label for="tidak-ada-preferensi">Tidak Ada Preferensi</label>
+        </div>
+        <br>
+        <!--fitur produk-->
+        <div class="my-3">
+          <h6 class="mb-3">Pertimbangan Fitur Produk</h6>
+          <input id="harga_fitur" name="fitur_produk" type="radio" value="Harga" required>
+          <label for="harga_fitur">Harga</label>
+      
+          <input id="merek" name="fitur_produk" type="radio" value="Merek" required>
+          <label for="merek">Merek</label>
+      
+          <input id="ulasan_fitur" name="fitur_produk" type="radio" value="Ulasan" required>
+          <label for="ulasan_fitur">Ulasan</label>
+      
+          <input id="garansi" name="fitur_produk" type="radio" value="Garansi" required>
+          <label for="garansi">Garansi</label>
+      
+          <input id="desain" name="fitur_produk" type="radio" value="Desain" required>
+          <label for="desain">Desain</label>
+        <br>
+        <br>
+        <div class="card">
+          <fieldset>
+              <p>Pendapatan atau budget mempengaruhi saya dalam aktivitas belanja online</p>
+              <label><input type="radio" name="pendapatan" value="1"> Setuju </label><br>
+              <label><input type="radio" name="pendapatan" value="0"> Netral </label><br>
+              <label><input type="radio" name="pendapatan" value="-1"> Tidak Setuju </label>
+          </fieldset>
+        </div>
+        <div class="card">
+          <fieldset>
+              <p>Membeli produk tanpa pertimbangan karena produk tersebut unik</p>
+              <label><input type="radio" name="produk_unik" value="-1"> Setuju</label><br>
+              <label><input type="radio" name="produk_unik" value="0"> Netral</label><br>
+              <label><input type="radio" name="produk_unik" value="1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+        <div class="card">
+          <fieldset>
+              <p>Harga terjangkau lebih penting dari kualitas produk</p>
+              <label><input type="radio" name="harga_terjangkau" value="-1"> Setuju</label><br>
+              <label><input type="radio" name="harga_terjangkau" value="0"> Netral</label><br>
+              <label><input type="radio" name="harga_terjangkau" value="1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+        <div class="card">
+          <fieldset>
+              <p>Membeli produk karena terpengaruh promo dan diskon dan memanfaatkannya</p>
+              <label><input type="radio" name="promo_diskon_pengaruh" value="-1"> Setuju</label><br>
+              <label><input type="radio" name="promo_diskon_pengaruh" value="0 "> Netral</label><br>
+              <label><input type="radio" name="promo_diskon_pengaruh" value="1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+        <div class="card">
+          <fieldset>
+              <p>Membandingkan harga antara platform satu dengan platoform lainnya sebelum memutuskan membeli produk</p>
+              <label><input type="radio" name="banding_harga" value="1"> Setuju</label><br>
+              <label><input type="radio" name="banding_harga" value="0 "> Netral</label><br>
+              <label><input type="radio" name="banding_harga" value="-1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+        <div class="card">
+          <fieldset>
+              <p>Rating dan ulasan yang bagus mempengaruhi dan meyakinkan saya dalam keputusan belanja</p>
+              <label><input type="radio" name="rating" value="1"> Setuju</label><br>
+              <label><input type="radio" name="rating" value="0 "> Netral</label><br>
+              <label><input type="radio" name="rating" value="-1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+        <div class="card">
+          <fieldset>
+              <p>Saya sering memperhatikan iklan dan mempengaruhi saya dalam keputusan belanja</p>
+              <label><input type="radio" name="iklan_digital" value="-1"> Setuju</label><br>
+              <label><input type="radio" name="iklan_digital" value="0 "> Netral</label><br>
+              <label><input type="radio" name="iklan_digital" value="1"> Tidak Setuju</label>
+          </fieldse>
+        </div>
+        <div class="card">
+          <fieldse>
+              <p>Campaign produk yang melibatkan influencer mempengaruhi saya dalam keputusan belanja</p>
+              <label><input type="radio" name="campaign_influencer" value="-1"> Setuju</label><br>
+              <label><input type="radio" name="campaign_influencer" value="0 "> Netral</label><br>
+              <label><input type="radio" name="campaign_influencer" value="1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+        <div class="card">
+          <fieldset>
+              <p>Pengaruh lingkungan sosial seperti orang tua, teman, kerabat mempengaruhi saya dalam keputusan belanja</p>
+              <label><input type="radio" name="lingkungan" value="-1"> Setuju</label><br>
+              <label><input type="radio" name="lingkungan" value="0 "> Netral</label><br>
+              <label><input type="radio" name="lingkungan" value="1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+        <div class="card">
+          <fieldset>
+              <p>Desain produk lebih penting dibandingkan kualitas</p>
+              <label><input type="radio" name="desain_lebih_penting" value="-1"> Setuju</label><br>
+              <label><input type="radio" name="desain_lebih_penting" value="0 "> Netral</label><br>
+              <label><input type="radio" name="desain_lebih_penting" value="1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+        <div class="card">
+          <fieldset>
+              <p>Kualitas produk lebih penting dibandingkan desain dengan harga murah</p>
+              <label><input type="radio" name="kualitas_desain" value="1"> Setuju</label><br>
+              <label><input type="radio" name="kualitas_desain" value="0 "> Netral</label><br>
+              <label><input type="radio" name="kualitas_desain" value="-1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+          <div class="card">
+          <fieldset>
+              <p>Saya loyal pada brand tertentu</p>
+              <label><input type="radio" name="loyal_brand" value="1"> Setuju</label><br>
+              <label><input type="radio" name="loyal_brand" value="0 "> Netral</label><br>
+              <label><input type="radio" name="loyal_brand" value="-1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+        <div class="card">
+          <fieldset>
+              <p>Keyakinan yang saya yakini mempengaruhi saya dalam keputusan belanja</p>
+              <label><input type="radio" name="keyakinan" value="1"> Setuju</label><br>
+              <label><input type="radio" name="keyakinan" value="0 "> Netral</label><br>
+              <label><input type="radio" name="keyakinan" value="-1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+        <div class="card">
+          <fieldset>
+              <p>Gaya hidup tertentu mempengaruhi saya dalam keputusan belanja</p>
+              <label><input type="radio" name="gaya_hidup" value="1"> Setuju</label><br>
+              <label><input type="radio" name="gaya_hidup" value="0 "> Netral</label><br>
+              <label><input type="radio" name="gaya_hidup" value="-1"> Tidak Setuju</label>
+          </fieldset>
+        </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+      </div>
+   
+    </main>
+  </div>
+</div>
+</main>
+</body>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script><script src="dashboard.js"></script>
+    </body>
+</html>

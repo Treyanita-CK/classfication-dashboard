@@ -1,0 +1,38 @@
+from django.db import models
+
+class Responden(models.Model):
+    nama = models.CharField(max_length=50)
+    usia = models.CharField(max_length=25)
+    gender = models.CharField(max_length=25)
+    etnis = models.CharField(max_length=25)
+    pendidikan = models.CharField(max_length=100)
+    pekerjaan = models.CharField(max_length=100)
+    frk_belanja = models.CharField(max_length=50)
+    platform = models.CharField(max_length=100)
+    barang = models.CharField(max_length=150)
+    range_harga = models.CharField(max_length=50)
+    alasan = models.CharField(max_length=100)
+    promo_diskon = models.CharField(max_length=50)
+    medsos = models.CharField(max_length=50)
+    iklan = models.CharField(max_length=50)
+    desain = models.CharField(max_length=50)
+    fitur_produk = models.CharField(max_length=50)
+     # Kolom lain
+    pendapatan = models.IntegerField()
+    produk_unik = models.IntegerField()
+    harga_terjangkau = models.IntegerField()
+    promo_diskon_pengaruh = models.IntegerField()
+    banding_harga = models.IntegerField()
+    rating = models.IntegerField()
+    iklan_digital = models.IntegerField()
+    campaign_influencer = models.IntegerField()
+    lingkungan = models.IntegerField()
+    desain_lebih_penting = models.IntegerField()
+    kualitas_desain = models.IntegerField()
+    loyal_brand = models.IntegerField()
+    keyakinan = models.IntegerField()
+    gaya_hidup = models.IntegerField()
+    kelas = models.CharField(max_length=50) # kecuali ini ga integer
+    kelas_angka = models.IntegerField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True, null=True)
+

@@ -1,0 +1,75 @@
+/* styles.css */
+.image-gallery {
+    display: flex; /* Menggunakan Flexbox untuk tata letak horizontal */
+    gap: 100px; /* Jarak antara gambar */
+    overflow-x: auto; /* Menambahkan scrollbar horizontal jika gambar melampaui lebar kontainer */
+}
+
+.image {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 0px;
+    overflow: hidden;
+    text-align: left;
+}
+
+#zoom-image {
+    width: 0%;
+    height: auto; 
+    transition: transform 0.3s ease;
+}
+
+#zoom-image:hover {
+    transform: scale(1.1); /* Zoom in gambar saat hover */
+    
+.card {
+    margin: auto;
+    width: 200px;
+    height: 200px;
+}
+.card-body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200%;
+    padding: 0;
+}
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+.card-2{
+    margin: auto;
+    width: 300;
+    height: 300;
+}
+.equal-height-card {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+body {
+    font-family: Arial, sans-serif;
+}
+fieldset {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px 0;
+}
+.legend-class {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+label {
+    display: block;
+    font-size: 1em;
+    margin: 5px 0;
+    color: #555;
+}
+input[type="radio"] {
+    margin-right: 5px;
+}
+}
+}    
